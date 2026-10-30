@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Free Badge</title>
+<style>
+:root{--bg:#121211;--panel:#1b1a19;--line:#2c2a28;--fg:#ece8e2;--muted:#8f8a83;--accent:#e2483a;--accent-ink:#fff4f1;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;display:grid;place-items:center;padding:16px}
+form{width:100%;max-width:340px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:14px}
+h1{margin:0;font:800 30px/1.1 system-ui,"Arial Black",sans-serif;letter-spacing:-.02em}
+h1 span{color:var(--accent)}
+p{margin:0;color:var(--muted)}
+label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+input{font:inherit;width:100%;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:10px}
+input:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:800 16px system-ui,sans-serif;color:var(--accent-ink);background:var(--accent);border:0;border-radius:6px;padding:12px;cursor:pointer}
+button[disabled]{opacity:.6;cursor:wait}
+#msg{min-height:1.5em;font-size:12px}
+#msg.err{color:#ff8a7a}
+</style>
+</head>
+<body>
+<form id="f" autocomplete="off">
+  <h1>FREE <span>BADGE</span></h1>
+  <p>Accès réservé aux collaborateurs Free Pro.</p>
+  <div>
+    <label for="pw">Mot de passe</label>
+    <input type="password" id="pw" required autofocus>
+  </div>
+  <button id="go">Entrer</button>
+  <div id="msg" role="status"></div>
+</form>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+async function unlock(pw,remember){
+  const [meta,buf]=await Promise.all([fetch("app.json").then(r=>r.json()),fetch("app.enc").then(r=>{if(!r.ok)throw new Error("fichier manquant");return r.arrayBuffer()})]);
+  const b=new Uint8Array(buf),salt=b.slice(0,16),iv=b.slice(16,28),ct=b.slice(28);
+  const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
+  const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:meta.it,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["decrypt"]);
+  let plain;try{plain=await crypto.subtle.decrypt({name:"AES-GCM",iv},key,ct)}catch(e){throw new Error("bad")}
+  const data=JSON.parse(new TextDecoder().decode(plain));
+  window.__A={};
+  for(const [p,b64] of Object.entries(data.files)){const s=atob(b64),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);
+    window.__A[p]=URL.createObjectURL(new Blob([u],{type:p.endsWith(".png")?"image/png":"application/octet-stream"}))}
+  if(remember)try{sessionStorage.setItem("fb_pw",pw)}catch(e){}
+  document.open();document.write(data.html);document.close();
+}
+$("f").addEventListener("submit",async e=>{e.preventDefault();const m=$("msg");m.className="";m.textContent="Ouverture…";$("go").disabled=true;
+  try{await unlock($("pw").value,true)}catch(err){m.className="err";m.textContent=err.message==="bad"?"Mot de passe incorrect.":"Erreur de chargement : "+err.message;$("go").disabled=false;$("pw").select()}});
+(async()=>{let pw=null;try{pw=sessionStorage.getItem("fb_pw")}catch(e){}if(pw){$("msg").textContent="Ouverture…";try{await unlock(pw,false)}catch(e){try{sessionStorage.removeItem("fb_pw")}catch(_){}$("msg").textContent=""}}})();
+})();
+</script>
+</body>
+</html>
