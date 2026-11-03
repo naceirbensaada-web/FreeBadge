@@ -1,4 +1,4 @@
-FREE BADGE — version protégée par mot de passe
+FREE PRO BADGES — version protégée par mot de passe
 ==============================================
 
 L'application, le logo, les calques et les stickers sont chiffrés (AES-256).
@@ -27,7 +27,8 @@ Utilisation
 
 Confidentialité
 - Les photos ne quittent jamais l'ordinateur ; rien n'est enregistré ni envoyé.
-- Le modèle de détourage (fichiers hseg*) n'est pas chiffré : ce n'est pas un élément de marque.
+- Le modèle de détourage (fichiers hseg*) et le moteur de calcul (tf.min.js) ne sont pas chiffrés : ce ne sont pas des éléments de marque.
+- Aucune ressource externe : tout est servi depuis ce site, et le navigateur a interdiction d'envoyer des données ailleurs.
 - Les moteurs de recherche sont invités à ne pas indexer le site (robots.txt).
 
 Export : JPG 5,5 × 8,5 cm à 300 dpi.
