@@ -1,35 +1,25 @@
-FREE PRO BADGES — version protégée par mot de passe
-==============================================
+FREE PRO BADGES — version sans mot de passe
+==========================================
 
-L'application, le logo, les calques et les stickers sont chiffrés (AES-256).
-Sans le mot de passe, ils sont illisibles, même en fouillant les fichiers.
-Le mot de passe n'est PAS dans ce dossier : il t'a été donné à part.
+Le site s'ouvre directement, sans écran de connexion.
+Attention : toute personne qui a le lien peut l'utiliser, et les fichiers
+(logo, calques, stickers, polices) sont lisibles par tous sur le dépôt public.
 
-Mettre en ligne gratuitement (sans carte bancaire)
+Mettre à jour sur GitHub Pages
+1. Sur le dépôt, supprimer app.enc et app.json (ils ne servent plus).
+2. « Add file » → « Upload files » → glisser TOUT LE CONTENU de ce dossier
+   (index.html, les dossiers stk/ et fonts/, les images, rvm.json, rvm_w.txt, tf.min.js)
+   → Commit changes. Le site se met à jour en 1 à 2 minutes.
 
-GitHub Pages
-1. github.com → + → New repository → nom « free-badge » → Public → Create
-2. « uploading an existing file » → glisser TOUT LE CONTENU de ce dossier
-   (index.html à la racine) → Commit changes
-3. Settings → Pages → Deploy from a branch → main / (root) → Save
-4. Lien : https://ton-pseudo.github.io/free-badge/
-
-Cloudflare Pages (alternative)
-1. dash.cloudflare.com → Workers & Pages → Create → Pages → Upload assets
-2. Nom « free-badge » → glisser ce dossier → Deploy
-3. Lien : https://free-badge.pages.dev
-
-Utilisation
-- Les collègues ouvrent le lien et saisissent le mot de passe.
-- Il reste mémorisé jusqu'à la fermeture de l'onglet.
-- Si le mot de passe circule trop : demander un nouveau paquet avec un nouveau mot de passe
-  et remplacer les fichiers en ligne.
+Détourage
+- Réglage « Contour des cheveux » (Net ↔ Progressif) à l'étape 2 :
+  le bord du détourage devient un dégradé de transparence en haut de la tête,
+  le bas (épaules, col) reste net.
 
 Confidentialité
 - Les photos ne quittent jamais l'ordinateur ; rien n'est enregistré ni envoyé.
-- Le modèle de détourage (rvm.json, rvm_w.txt) et le moteur de calcul (tf.min.js) ne sont pas chiffrés : ce ne sont pas des éléments de marque.
 - Modèle de détourage : Robust Video Matting (MobileNetV3), licence GPL-3.0.
-- Aucune ressource externe : tout est servi depuis ce site, et le navigateur a interdiction d'envoyer des données ailleurs.
+- Aucune ressource externe : tout est servi depuis ce site.
 - Les moteurs de recherche sont invités à ne pas indexer le site (robots.txt).
 
 Export : JPG 5,5 × 8,5 cm à 300 dpi.
