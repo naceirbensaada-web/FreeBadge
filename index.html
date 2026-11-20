@@ -387,7 +387,7 @@ const DPI=300,PW=Math.round(5.5/2.54*DPI),PH=Math.round(8.5/2.54*DPI),SC=PW/OW;
 // Modèles : calques extraits des frames Figma (fond derrière la personne, premier plan devant), texte en coordonnées Figma
 const MODELS={
   f18:{label:"Good Vibes",bgColor:"#d7dce8",scrib:"f18_scrib.png",loop:"f18_loop.png",fg:"f18_fg_v2.png",name:{size:70.82,base:1025},role:{size:49.2,base:1214.8},
-    stickers:[{n:"Goodvibes",x:416,y:132,w:205,r:11}]}
+    stickers:[]}
 };
 // SERVICES : nom + couleur (palette Starship Free Pro). Ajouter une ligne pour un nouveau service.
 const SERVICES=[
@@ -414,7 +414,7 @@ const LOGOS=[["original","Original","logo_original.png"],["noir","Noir","logo_no
 // position du logo dans le cadre (pixels du calque 1041 × 1609)
 const LOGO_POS={x:260,y:1294,w:520,FW:1041,FH:1609};
 const FONT='"Iliad", "Helvetica Neue", Arial, sans-serif';
-const st={bgMode:"svc",model:"f18",src:null,mask:null,z:1,tx:0,ty:0,imgs:{},stk:[],sel:null,svc:0,bgColor:SERVICES[0].color,logo:"original",txColor:"#ffffff"};
+const st={bgMode:"black",model:"f18",src:null,mask:null,z:1,tx:0,ty:0,imgs:{},stk:[],sel:null,svc:0,bgColor:SERVICES[0].color,logo:"original",txColor:"#ffffff"};
 const logoImgs={};const logoImg=k=>logoImgs[k]||(logoImgs[k]=loadImg(LOGOS.find(l=>l[0]===k)[2]));
 const STICKERS=["100", "Antenne", "Boutique", "Bulle", "Cartes01", "Cartes02", "Clap01", "Clap02", "Code", "Coeur01", "Coeur02", "Coeur03", "Coeurs", "Confettis", "Courbe", "Des", "Etoiles", "etre-free-fr", "Feuilles", "Fleche", "Fleches", "Fleurs01", "Fleurs02", "Fleurs03", "Fleurs04", "FreeboxUltra", "Freepro", "Fusee", "Gateau", "Goodvibes", "Liberte", "Libre", "Loupe", "Medaille", "Megaphone", "Merci", "Micro", "News", "Ordinateur", "Palmier", "Paris", "Plus", "Recrute", "RejoinsNous", "Smiley", "Spacionaute", "Top", "Un", "Waow"];
 const stkImgs={};const stkImg=n=>stkImgs[n]||(stkImgs[n]=loadImg("stk/"+n+".png"));
