@@ -481,14 +481,20 @@ async function render(){
         oq.drawImage(st.mask,dx,dy,dw,dh);oq.globalCompositeOperation="source-in";oq.fillStyle="#ff2020";oq.fillRect(0,0,OW,OH);
         x.save();x.globalAlpha=.5;x.drawImage(oc,0,0,OW,OH);x.restore()}
     }
+    // lisibilité du texte : voile sombre en dégradé sur le bas du badge (sous les traits, le logo et le texte)
+    const TS=window.__TXT||"grad";
+    if(TS.includes("grad")){const g=x.createLinearGradient(0,OH*0.56,0,OH);g.addColorStop(0,"rgba(0,0,0,0)");g.addColorStop(0.45,"rgba(0,0,0,.38)");g.addColorStop(1,"rgba(0,0,0,.72)");x.fillStyle=g;x.fillRect(0,OH*0.56,OW,OH*0.44)}
+    if(TS.includes("band")){const y0=OH*0.585,y1=OH*0.80,r=14;x.save();x.fillStyle="rgba(0,0,0,.42)";x.beginPath();x.roundRect(OW*0.08,y0,OW*0.84,y1-y0,r);x.fill();x.restore()}
     x.drawImage(fg,0,0,OW,OH);
     {const sv=SERVICES[st.svc]||{},col=sv.stroke||shade(sv.color||m.bgColor);x.drawImage(await swoosh(col),0,0,OW,OH)}
-    {const lg=await logoImg(st.logo),lx=LOGO_POS.x*OW/LOGO_POS.FW,ly=LOGO_POS.y*OH/LOGO_POS.FH,lw=LOGO_POS.w*OW/LOGO_POS.FW;x.drawImage(lg,lx,ly,lw,lw*lg.height/lg.width)}
+    {const lg=await logoImg(st.logo),lx=LOGO_POS.x*OW/LOGO_POS.FW,ly=LOGO_POS.y*OH/LOGO_POS.FH,lw=LOGO_POS.w*OW/LOGO_POS.FW;x.save();
+      if(TS.includes("shadow")&&st.logo!=="noir"){x.shadowColor="rgba(0,0,0,.55)";x.shadowBlur=10;x.shadowOffsetY=1}x.drawImage(lg,lx,ly,lw,lw*lg.height/lg.width);x.restore()}
     await drawStk(false);
-    const kx=OW/FW,ky=OH/FH;x.fillStyle=st.txColor||"#ffffff";x.textAlign="center";x.textBaseline="alphabetic";
+    const kx=OW/FW,ky=OH/FH;x.save();x.fillStyle=st.txColor||"#ffffff";x.textAlign="center";x.textBaseline="alphabetic";
+    if(TS.includes("shadow")&&(st.txColor||"#ffffff").toLowerCase()!=="#000000"){x.shadowColor="rgba(0,0,0,.6)";x.shadowBlur=10;x.shadowOffsetY=1}
     const put=(t,spec,wt)=>{if(!t)return;let fs=spec.size*kx;x.font=`${wt} ${fs}px ${FONT}`;const w=x.measureText(t).width,max=OW*0.9;
       if(w>max){fs*=max/w;x.font=`${wt} ${fs}px ${FONT}`}x.fillText(t,OW/2,spec.base*ky)};
-    put($("txt").value.trim(),m.name,700);put($("role").value.trim(),m.role,700);
+    put($("txt").value.trim(),m.name,700);put($("role").value.trim(),m.role,700);x.restore();
     await new Promise(ok=>c.toBlob(async b0=>{const bl=await setDpi(b0);st.blob=bl;const o=$("out");if(o.dataset.u)URL.revokeObjectURL(o.dataset.u);const u=URL.createObjectURL(bl);o.dataset.u=u;o.src=u;o.onload=placeSel;ok()},"image/jpeg",0.94));
   }catch(e){$("status").textContent="Modèle introuvable ("+e.message+")"}
   rendering=false;if(again){again=false;render()}
