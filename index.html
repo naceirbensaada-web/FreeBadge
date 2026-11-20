@@ -131,12 +131,13 @@ details .inner{display:flex;flex-direction:column;gap:12px}
 .dots i.reach{cursor:pointer}.dots i.reach:hover{background:var(--red);opacity:.7}
 .arr{flex:none;width:36px;height:36px;border-radius:var(--rb);border:1.5px solid var(--line);background:var(--panel);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0 0 3px}
 .arr:hover:not([disabled]){border-color:var(--fg)}.arr[disabled]{opacity:.3;cursor:not-allowed}
-.step::before{content:"Étape 0" attr(data-step) " / 07";margin-bottom:-4px}
+.step::before{content:"Étape 0" attr(data-step) " / 08";margin-bottom:-4px}
 .step h2{font-family:var(--title);font-weight:700;font-size:30px;line-height:1.05;margin:0;letter-spacing:-.01em}
 .step h2.ok{color:var(--fg)}
 .step h2.ok::after{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--sun);margin-left:10px;vertical-align:4px}
 .step .big{font:400 15px/1.6 var(--text);margin:0;color:var(--fg)}
 .step .big b{color:var(--strong);font-weight:700}
+.zoomrow{display:flex;align-items:center;gap:8px}.zoomrow input{flex:1}.zbtn{flex:none;width:40px;height:40px;padding:0;font-size:20px;text-align:center}
 .step .drop{font:700 17px var(--text);padding:32px 20px}
 .tools{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:14px}
 .tools .ends{color:var(--muted);font-size:12px;font-weight:400}
@@ -181,7 +182,7 @@ details .inner{display:flex;flex-direction:column;gap:12px}
 <div class="hero">
   <div><span class="eyebrow">Générateur de badges</span>
   <h1>Crée ton badge<span>Free Pro</span></h1></div>
-  <p>7 étapes, un JPG <b>5,5 × 8,5 cm</b> prêt à imprimer. Ta photo reste sur ton appareil.</p>
+  <p>8 étapes, un JPG <b>5,5 × 8,5 cm</b> prêt à imprimer. Ta photo reste sur ton appareil.</p>
 </div>
 <div class="wrap">
   <div class="grid">
@@ -201,7 +202,7 @@ details .inner{display:flex;flex-direction:column;gap:12px}
     </div>
 
     <div class="side">
-      <div class="stepbar"><button type="button" class="arr" id="prevS" aria-label="Étape précédente">‹</button><span id="stepNum">Étape 1 / 7</span><div class="dots" id="dots"></div><button type="button" class="arr" id="nextS" aria-label="Étape suivante">›</button></div>
+      <div class="stepbar"><button type="button" class="arr" id="prevS" aria-label="Étape précédente">‹</button><span id="stepNum">Étape 1 / 8</span><div class="dots" id="dots"></div><button type="button" class="arr" id="nextS" aria-label="Étape suivante">›</button></div>
       <div class="status" id="segStatus" role="status">Préparation de l'outil…</div>
 
       <section class="box step" data-step="1">
@@ -233,6 +234,18 @@ details .inner{display:flex;flex-direction:column;gap:12px}
       </section>
 
       <section class="box step" data-step="3" hidden>
+        <h2>Ajuste le zoom</h2>
+        <p class="big">Agrandis ou réduis ta photo avec le curseur, puis <b>glisse-la</b> sur l'aperçu pour bien la placer dans le badge.</p>
+        <div class="row"><div class="top"><span>Zoom</span><output id="zoomV">100 %</output></div>
+          <div class="zoomrow"><button type="button" class="chip zbtn" id="zoomOut" aria-label="Dézoomer">−</button>
+          <input type="range" id="zoomUI" min="30" max="400" step="1" value="100" aria-label="Zoom de la photo">
+          <button type="button" class="chip zbtn" id="zoomIn" aria-label="Zoomer">+</button></div></div>
+        <button type="button" class="chip" id="zoomReset" style="text-align:center">Recentrer la photo</button>
+        <p class="hint">Astuce : tu peux aussi zoomer avec la <b>molette</b> de la souris ou en <b>pinçant</b> sur l'écran.</p>
+        <div class="nav"><button type="button" class="back">← Retour</button><button type="button" class="next">Suivant →</button></div>
+      </section>
+
+      <section class="box step" data-step="4" hidden>
         <h2>Écris ton nom et ta fonction</h2>
         <p class="big">Ils s'affichent en bas du badge.</p>
         <label class="lbl" for="txt">Prénom et nom</label>
@@ -244,7 +257,7 @@ details .inner{display:flex;flex-direction:column;gap:12px}
         <div class="nav"><button type="button" class="back">← Retour</button><button type="button" class="next">Suivant →</button></div>
       </section>
 
-      <section class="box step" data-step="4" hidden>
+      <section class="box step" data-step="5" hidden>
         <h2>Choisis ton service</h2>
         <p class="big">La couleur du fond s'adapte à ton service.</p>
         <div class="svc" id="svc"></div>
@@ -255,14 +268,14 @@ details .inner{display:flex;flex-direction:column;gap:12px}
         <div class="nav"><button type="button" class="back">← Retour</button><button type="button" class="next">Suivant →</button></div>
       </section>
 
-      <section class="box step" data-step="5" hidden>
+      <section class="box step" data-step="6" hidden>
         <h2>Choisis ton logo</h2>
         <p class="big">Prends la version qui se lit le mieux sur ton badge.</p>
         <div class="chips" id="logoSel" style="grid-template-columns:repeat(3,minmax(0,1fr))"></div>
         <div class="nav"><button type="button" class="back">← Retour</button><button type="button" class="next">Suivant →</button></div>
       </section>
 
-      <section class="box step" data-step="6" hidden>
+      <section class="box step" data-step="7" hidden>
         <h2>Ajoute des stickers</h2>
         <p class="big">Clique sur un sticker pour l'ajouter. Sur l'aperçu : <b>glisse</b> pour le déplacer, tire un <b>coin</b> pour l'agrandir, la <b>poignée ronde</b> pour le tourner.</p>
         <div class="stk-grid" id="stkGrid"></div>
@@ -273,7 +286,7 @@ details .inner{display:flex;flex-direction:column;gap:12px}
         <div class="nav"><button type="button" class="back">← Retour</button><button type="button" class="next">Suivant →</button></div>
       </section>
 
-      <section class="box step" data-step="7" hidden>
+      <section class="box step" data-step="8" hidden>
         <h2>Télécharge ton badge</h2>
         <p class="big">Imprime-le <b>à l'échelle (100 %, taille réelle)</b>, découpe-le et place-le dans ton badge.</p>
         <button type="button" class="gen" id="dl">Télécharger le JPG</button>
@@ -874,7 +887,7 @@ function ovPhase(){phT=performance.now();phF=ovFrac}
 function ovSet(f,label){ovFrac=Math.max(ovFrac,Math.min(1,f));$("ovBar").style.width=(ovFrac*100).toFixed(1)+"%";$("ovPct").textContent=Math.round(ovFrac*100)+" %";if(label)$("ovT").textContent=label;ovTime()}
 function ovTime(){const s=(performance.now()-ovT0)/1000,mm=Math.floor(s/60),ss=Math.floor(s%60);let t=mm+":"+String(ss).padStart(2,"0");
   const pp=phT?(ovFrac-phF)/(1-phF):0;if(pp>0.1&&ovFrac<0.97){const e=(performance.now()-phT)/1000,r=Math.max(1,Math.round(e/pp*(1-pp)));t+=" · encore ~"+(r>=60?Math.round(r/60)+" min":r+" s")}$("ovTime").textContent=t}
-let step=1,maxStep=1;const NSTEP=7;
+let step=1,maxStep=1;const NSTEP=8;
 $("brErase").addEventListener("click",()=>setBrush(st.brush==="erase"?null:"erase"));
 $("brRestore").addEventListener("click",()=>setBrush(st.brush==="restore"?null:"restore"));
 $("brSize").addEventListener("input",()=>{});
@@ -885,10 +898,16 @@ function goStep(n){step=Math.max(1,Math.min(NSTEP,n));maxStep=Math.max(maxStep,s
   $("stepNum").textContent="Étape "+step+" / "+NSTEP;
   $("dots").innerHTML=Array.from({length:NSTEP},(_,i)=>'<i data-s="'+(i+1)+'" title="Étape '+(i+1)+'" class="'+(i+1===step?"on":i+1<step?"past":"")+(i+1<=maxStep&&i+1!==step?" reach":"")+'"></i>').join("");
   $("prevS").disabled=step<=1;$("nextS").disabled=step>=maxStep;
-  if(step!==6)select(null);if(step!==2&&st.brush)setBrush(null);placeSel();if(matchMedia("(max-width:820px)").matches)document.querySelector('.step[data-step="'+step+'"]').scrollIntoView({behavior:"smooth",block:"start"})}
+  if(step!==7)select(null);if(step===3)syncZoom();if(step!==2&&st.brush)setBrush(null);placeSel();if(matchMedia("(max-width:820px)").matches)document.querySelector('.step[data-step="'+step+'"]').scrollIntoView({behavior:"smooth",block:"start"})}
 document.querySelector(".side").addEventListener("click",e=>{if(e.target.closest(".next"))goStep(step+1);else if(e.target.closest(".back"))goStep(step-1)});
 $("prevS").addEventListener("click",()=>goStep(step-1));$("nextS").addEventListener("click",()=>{if(step<maxStep)goStep(step+1)});
 $("dots").addEventListener("click",e=>{const d=e.target.closest("i.reach");if(d&&+d.dataset.s<=maxStep)goStep(+d.dataset.s)});
+function syncZoom(){const z=Math.round(st.z*100);$("zoomUI").value=z;$("zoomV").textContent=z+" %"}
+function setZoom(nz){nz=Math.min(4,Math.max(.3,nz));const f=nz/st.z;st.tx*=f;st.ty*=f;st.z=nz;syncZoom();redraw();commitSoon()}
+$("zoomUI").addEventListener("input",()=>setZoom($("zoomUI").value/100));
+$("zoomIn").addEventListener("click",()=>setZoom(st.z*1.1));$("zoomOut").addEventListener("click",()=>setZoom(st.z/1.1));
+$("zoomReset").addEventListener("click",()=>{st.z=1;st.tx=0;st.ty=0;syncZoom();render();commit()});
+out.addEventListener("wheel",()=>{if(step===3)requestAnimationFrame(syncZoom)},{passive:true});
 function setBrush(b){st.brush=b;$("brErase").setAttribute("aria-pressed",b==="erase");$("brRestore").setAttribute("aria-pressed",b==="restore");
   $("brRow").hidden=!b;out.classList.toggle("brush",!!b);if(!b)$("brushCur").hidden=true;render()}
 function showMenu(on){$("s2Skip").hidden=on;$("segBtn").hidden=on;$("s2Tools").hidden=!on;$("edgeRow").hidden=!st.raw;$("hairRow").hidden=!(st.raw&&st.raw.P);if(!on&&st.brush)setBrush(null);const t=$("s2T");
