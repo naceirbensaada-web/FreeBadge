@@ -246,12 +246,11 @@ details .inner{display:flex;flex-direction:column;gap:12px}
       </section>
 
       <section class="box step" data-step="4" hidden>
-        <h2>Écris ton nom et ta fonction</h2>
-        <p class="big">Ils s'affichent en bas du badge.</p>
+        <h2>Écris ton nom</h2>
+        <p class="big">Il s'affiche en bas du badge.</p>
         <label class="lbl" for="txt">Prénom et nom</label>
         <input type="text" id="txt" value="Prénom Nom" placeholder="Prénom Nom">
-        <label class="lbl" for="role">Fonction</label>
-        <input type="text" id="role" value="fonction" placeholder="fonction">
+        <input type="hidden" id="role" value="">
         <div class="lbl">Couleur du texte</div>
         <div class="sw" id="txSw"></div>
         <div class="nav"><button type="button" class="back">← Retour</button><button type="button" class="next">Suivant →</button></div>
@@ -299,7 +298,7 @@ details .inner{display:flex;flex-direction:column;gap:12px}
         <span class="eyebrow">Aide</span>
         <div class="help-t">Besoin d'aide ?</div>
         <p>Contacte <a href="https://outlook.office.com/mail/deeplink/compose?to=Naceir.BENSAADA%40freepro.com&amp;subject=Free%20Pro%20Badges%20%E2%80%94%20aide" target="_blank" rel="noopener" title="Ouvrir dans Outlook">Naceir.BENSAADA@freepro.com</a></p>
-        <p style="margin-top:8px;font-size:11px;opacity:.6">Version du 20/11 · dégradé + zoom</p>
+        <p style="margin-top:8px;font-size:11px;opacity:.6">Version du 23/11 · sans fonction</p>
       </aside>
 
       <!-- détourage figé : seuil 60, bord 129 -->
@@ -495,7 +494,7 @@ async function render(){
     if(TS.includes("shadow")&&(st.txColor||"#ffffff").toLowerCase()!=="#000000"){x.shadowColor="rgba(0,0,0,.6)";x.shadowBlur=10;x.shadowOffsetY=1}
     const put=(t,spec,wt)=>{if(!t)return;let fs=spec.size*kx;x.font=`${wt} ${fs}px ${FONT}`;const w=x.measureText(t).width,max=OW*0.9;
       if(w>max){fs*=max/w;x.font=`${wt} ${fs}px ${FONT}`}x.fillText(t,OW/2,spec.base*ky)};
-    put($("txt").value.trim(),m.name,700);put($("role").value.trim(),m.role,700);x.restore();
+    put($("txt").value.trim(),m.name,700);x.restore();
     await new Promise(ok=>c.toBlob(async b0=>{const bl=await setDpi(b0);st.blob=bl;const o=$("out");if(o.dataset.u)URL.revokeObjectURL(o.dataset.u);const u=URL.createObjectURL(bl);o.dataset.u=u;o.src=u;o.onload=placeSel;ok()},"image/jpeg",0.94));
   }catch(e){$("status").textContent="Modèle introuvable ("+e.message+")"}
   rendering=false;if(again){again=false;render()}
