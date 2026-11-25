@@ -313,7 +313,7 @@ html.vbg body::before{display:none}
         <span class="eyebrow">Aide</span>
         <div class="help-t">Besoin d'aide ?</div>
         <p>Contacte <a href="https://outlook.office.com/mail/deeplink/compose?to=Naceir.BENSAADA%40freepro.com&amp;subject=Free%20Pro%20Badges%20%E2%80%94%20aide" target="_blank" rel="noopener" title="Ouvrir dans Outlook">Naceir.BENSAADA@freepro.com</a></p>
-        <p style="margin-top:8px;font-size:11px;opacity:.6">Version du 25/11 · édition Noël · Starship</p>
+        <p style="margin-top:8px;font-size:11px;opacity:.6">Version du 25/11 (b) · édition Noël · Starship</p>
       </aside>
 
       <!-- détourage figé : seuil 60, bord 129 -->
@@ -488,7 +488,8 @@ if(NOEL){document.documentElement.classList.add("noel");
 const STICKERS=[...(NOEL?NOEL_STK:[]),"100", "Antenne", "Boutique", "Bulle", "Cartes01", "Cartes02", "Clap01", "Clap02", "Code", "Coeur01", "Coeur02", "Coeur03", "Coeurs", "Confettis", "Courbe", "Des", "Etoiles", "etre-free-fr", "Feuilles", "Fleche", "Fleches", "Fleurs01", "Fleurs02", "Fleurs03", "Fleurs04", "FreeboxUltra", "Freepro", "Fusee", "Gateau", "Goodvibes", "Liberte", "Libre", "Loupe", "Medaille", "Megaphone", "Merci", "Micro", "News", "Ordinateur", "Palmier", "Paris", "Plus", "Recrute", "RejoinsNous", "Smiley", "Spacionaute", "Top", "Un", "Waow"];
 const stkImgs={};const stkImg=n=>stkImgs[n]||(stkImgs[n]=loadImg("stk/"+n+".png"));
 /* écusson du service : fixe, en haut à droite du badge (dossier patches/) */
-const patchImgs={};const patchImg=f=>patchImgs[f]||(patchImgs[f]=loadImg("patches/"+f));
+const PATCH_V="25-11-b"; /* changer ce numéro quand un écusson est modifié, pour forcer le rechargement */
+const patchImgs={};const patchImg=f=>patchImgs[f]||(patchImgs[f]=loadImg("patches/"+f+"?v="+PATCH_V));
 const PATCH={size:0.25,margin:0.04}; // taille et marge en fraction de la largeur du badge
 
 function loadImg(src){src=(window.__A&&window.__A[src])||src;return new Promise((ok,ko)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>ko(new Error(src));i.src=src})}
