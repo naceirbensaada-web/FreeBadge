@@ -179,7 +179,7 @@ details .inner{display:flex;flex-direction:column;gap:12px}
 #bgLoop{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;background:#000}
 /* mode clair : la boucle est inversée (espace blanc, planètes gardent leurs couleurs) puis éclaircie */
 :root:not([data-theme="dark"]) #bgLoop{filter:invert(1) hue-rotate(180deg) saturate(.9) brightness(1.04);background:#fff}
-#bgVeil{position:fixed;inset:0;z-index:0;pointer-events:none;background:rgba(250,250,250,.55)}
+#bgVeil{position:fixed;inset:0;z-index:0;pointer-events:none;background:rgba(250,250,250,.30)}
 :root[data-theme="dark"] #bgVeil{background:rgba(0,0,0,.30)}
 html.vbg body::before{display:none}
 
