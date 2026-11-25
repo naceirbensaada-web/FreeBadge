@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; worker-src 'self' blob:; connect-src 'self'; img-src 'self' blob: data:; font-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; media-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; worker-src 'self' blob:; connect-src 'self'; img-src 'self' blob: data:; font-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; media-src 'self'; object-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -175,6 +175,12 @@ details .inner{display:flex;flex-direction:column;gap:12px}
 @media (max-width:640px){.topbar .in{height:58px}.brand img{height:22px}.brand .sep,.brand span{display:none}.hero{padding:26px 24px 16px}.box{padding:20px}.stage{padding:20px}.foot .claim{font-size:19px}}
 /* NOËL : neige derrière le contenu */
 #snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+/* Starship : fond animé + transition */
+#bgLoop{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;background:#000}
+#bgVeil{position:fixed;inset:0;z-index:0;pointer-events:none;background:rgba(255,255,255,.86)}
+:root[data-theme="dark"] #bgVeil{background:rgba(0,0,0,.30)}
+html.vbg body::before{display:none}
+#warp{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:90;display:none}
 
 </style>
 
@@ -301,7 +307,7 @@ details .inner{display:flex;flex-direction:column;gap:12px}
         <span class="eyebrow">Aide</span>
         <div class="help-t">Besoin d'aide ?</div>
         <p>Contacte <a href="https://outlook.office.com/mail/deeplink/compose?to=Naceir.BENSAADA%40freepro.com&amp;subject=Free%20Pro%20Badges%20%E2%80%94%20aide" target="_blank" rel="noopener" title="Ouvrir dans Outlook">Naceir.BENSAADA@freepro.com</a></p>
-        <p style="margin-top:8px;font-size:11px;opacity:.6">Version du 25/11 · édition Noël</p>
+        <p style="margin-top:8px;font-size:11px;opacity:.6">Version du 25/11 · édition Noël · Starship</p>
       </aside>
 
       <!-- détourage figé : seuil 60, bord 129 -->
@@ -432,6 +438,43 @@ const LOGO_POS={x:260,y:1294,w:520,FW:1041,FH:1609};
 const FONT='"Iliad", "Helvetica Neue", Arial, sans-serif';
 const st={bgMode:"black",model:"f18",src:null,mask:null,z:1,tx:0,ty:0,imgs:{},stk:[],sel:null,svc:0,bgColor:SERVICES[0].color,logo:"original",txColor:"#ffffff"};
 const logoImgs={};const logoImg=k=>logoImgs[k]||(logoImgs[k]=loadImg(LOGOS.find(l=>l[0]===k)[2]));
+/* ===== STARSHIP — début ===== fond animé (boucle.mp4) + transition vaisseau (dossier trans/). Pour tout retirer : mettre STARSHIP=false */
+const STARSHIP=true;
+const WARP={fr:[],n:33,mid:17,ok:0,on:false,armed:false,c:null};
+(function(){
+  if(!STARSHIP)return;
+  const rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const de=document.documentElement;de.classList.add("vbg");
+  const v=document.createElement("video");v.id="bgLoop";v.muted=true;v.defaultMuted=true;v.loop=true;v.playsInline=true;
+  v.setAttribute("muted","");v.setAttribute("playsinline","");v.setAttribute("aria-hidden","true");v.poster="boucle.jpg";v.preload="auto";
+  const veil=document.createElement("div");veil.id="bgVeil";
+  document.body.prepend(veil);document.body.prepend(v);
+  v.addEventListener("error",()=>{de.classList.remove("vbg");v.remove();veil.remove()});
+  v.src="boucle.mp4";
+  if(!rm){v.autoplay=true;const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{})}
+  document.addEventListener("visibilitychange",()=>{if(rm)return;if(document.hidden)v.pause();else{const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{})}});
+  setTimeout(()=>{WARP.armed=true},0);
+  if(rm)return;
+  const c=document.createElement("canvas");c.id="warp";c.setAttribute("aria-hidden","true");document.body.appendChild(c);WARP.c=c;
+  for(let i=0;i<WARP.n;i++){const im=new Image();im.onload=()=>WARP.ok++;im.src="trans/t"+String(i).padStart(2,"0")+".webp";WARP.fr.push(im)}
+})();
+function warp(mid){
+  let done=false;const fire=()=>{if(done||!mid)return;done=true;try{mid()}catch(e){console.error(e)}};
+  if(!WARP.c||WARP.on||WARP.ok<WARP.n){fire();return}
+  WARP.on=true;const c=WARP.c,x=c.getContext("2d");
+  const W=innerWidth,H=innerHeight,dpr=Math.min(devicePixelRatio||1,2);c.width=Math.round(W*dpr);c.height=Math.round(H*dpr);
+  const k=Math.max(W/1280,H/720),dw=1280*k,dh=720*k,dx=(W-dw)/2,dy=(H-dh)/2;
+  x.setTransform(dpr,0,0,dpr,0,0);c.style.display="block";
+  const t0=performance.now();let last=-1;
+  const tick=now=>{const f=Math.floor((now-t0)*24/1000);
+    if(f!==last){last=f;
+      if(f>=WARP.n){x.clearRect(0,0,W,H);c.style.display="none";WARP.on=false;fire();return}
+      x.clearRect(0,0,W,H);x.drawImage(WARP.fr[f],dx,dy,dw,dh);
+      if(f>=WARP.mid)fire()}
+    requestAnimationFrame(tick)};
+  requestAnimationFrame(tick);
+}
+/* ===== STARSHIP — fin ===== */
 /* ===== NOËL — début ===== s'arrête tout seul le 6 janvier 2027 (changer la date ci-dessous, ou mettre NOEL_FIN="2000-01-01" pour l'arrêter tout de suite) */
 const NOEL_FIN="2027-01-06";
 const NOEL=(()=>{try{const q=new URLSearchParams(location.search).get("noel");if(q==="1")return true;if(q==="0")return false}catch(e){}return new Date()<new Date(NOEL_FIN+"T00:00:00")})();
@@ -935,6 +978,9 @@ function goStep(n){step=Math.max(1,Math.min(NSTEP,n));maxStep=Math.max(maxStep,s
 document.querySelector(".side").addEventListener("click",e=>{if(e.target.closest(".next"))goStep(step+1);else if(e.target.closest(".back"))goStep(step-1)});
 $("prevS").addEventListener("click",()=>goStep(step-1));$("nextS").addEventListener("click",()=>{if(step<maxStep)goStep(step+1)});
 $("dots").addEventListener("click",e=>{const d=e.target.closest("i.reach");if(d&&+d.dataset.s<=maxStep)goStep(+d.dataset.s)});
+/* Starship : le vaisseau traverse l'écran à chaque changement d'étape (l'étape change quand il couvre l'écran) et au téléchargement */
+{const _goStep=goStep;goStep=function(n){const t=Math.max(1,Math.min(NSTEP,n));if(!STARSHIP||!WARP.armed||WARP.on||t===step){_goStep(n);return}warp(()=>_goStep(n))};
+ $("dl").addEventListener("click",()=>{if(STARSHIP)warp()})}
 function syncZoom(){const z=Math.round(st.z*100);$("zoomUI").value=z;$("zoomV").textContent=z+" %"}
 function setZoom(nz){nz=Math.min(4,Math.max(.3,nz));const f=nz/st.z;st.tx*=f;st.ty*=f;st.z=nz;syncZoom();redraw();commitSoon()}
 $("zoomUI").addEventListener("input",()=>setZoom($("zoomUI").value/100));
