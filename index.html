@@ -313,7 +313,7 @@ html.vbg body::before{display:none}
         <span class="eyebrow">Aide</span>
         <div class="help-t">Besoin d'aide ?</div>
         <p>Contacte <a href="https://outlook.office.com/mail/deeplink/compose?to=Naceir.BENSAADA%40freepro.com&amp;subject=Free%20Pro%20Badges%20%E2%80%94%20aide" target="_blank" rel="noopener" title="Ouvrir dans Outlook">Naceir.BENSAADA@freepro.com</a></p>
-        <p style="margin-top:8px;font-size:11px;opacity:.6">Version du 25/11 (b) · édition Noël · Starship</p>
+        <p style="margin-top:8px;font-size:11px;opacity:.6">Version du 25/11 (d) · édition Noël · Starship</p>
       </aside>
 
       <!-- détourage figé : seuil 60, bord 129 -->
@@ -451,11 +451,11 @@ const STARSHIP=true;
   const rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
   const de=document.documentElement;de.classList.add("vbg");
   const v=document.createElement("video");v.id="bgLoop";v.muted=true;v.defaultMuted=true;v.loop=true;v.playsInline=true;
-  v.setAttribute("muted","");v.setAttribute("playsinline","");v.setAttribute("aria-hidden","true");v.poster="boucle.jpg";v.preload="auto";
+  v.setAttribute("muted","");v.setAttribute("playsinline","");v.setAttribute("aria-hidden","true");v.poster="boucle.jpg?v=3";v.preload="auto";
   const veil=document.createElement("div");veil.id="bgVeil";
   document.body.prepend(veil);document.body.prepend(v);
   v.addEventListener("error",()=>{de.classList.remove("vbg");v.remove();veil.remove()});
-  v.src="boucle.mp4";
+  v.src="boucle.mp4?v=3";
   if(!rm){v.autoplay=true;const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{})}
   document.addEventListener("visibilitychange",()=>{if(rm)return;if(document.hidden)v.pause();else{const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{})}});
 })();
