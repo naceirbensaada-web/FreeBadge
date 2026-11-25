@@ -480,7 +480,7 @@ const NOEL_FIN="2027-01-06";
 const NOEL=(()=>{try{const q=new URLSearchParams(location.search).get("noel");if(q==="1")return true;if(q==="0")return false}catch(e){}return new Date()<new Date(NOEL_FIN+"T00:00:00")})();
 const NOEL_STK=["Noel_Sapin","Noel_Bonnet","Noel_Cadeau","Noel_Flocon","Noel_Boule","Noel_SucreOrge","Noel_Bonhomme","Noel_Houx","Noel_JoyeusesFetes"];
 if(NOEL){document.documentElement.classList.add("noel");
-  addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".hero .eyebrow");if(e)e.textContent="Édition spéciale fêtes ❄";});
+  addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".hero .eyebrow");if(e)e.textContent="Joyeux Noël Explorers !";e.style.fontFamily="var(--title)";});
   // chute de flocons sur tout le site (au-dessus du contenu, sans bloquer les clics ; coupée si l'appareil demande moins d'animations)
   addEventListener("load",()=>{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
     const c=document.createElement("canvas");c.id="snow";c.setAttribute("aria-hidden","true");document.body.appendChild(c);const q=c.getContext("2d");let W,H,F=[];
