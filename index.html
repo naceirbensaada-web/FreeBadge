@@ -173,6 +173,9 @@ details .inner{display:flex;flex-direction:column;gap:12px}
 .foot .claim span{color:var(--red)}
 .foot small{color:var(--muted);font-size:12px}
 @media (max-width:640px){.topbar .in{height:58px}.brand img{height:22px}.brand .sep,.brand span{display:none}.hero{padding:26px 24px 16px}.box{padding:20px}.stage{padding:20px}.foot .claim{font-size:19px}}
+/* NOËL : neige derrière le contenu */
+#snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+
 </style>
 
 <div class="topbar"><div class="in">
@@ -298,7 +301,7 @@ details .inner{display:flex;flex-direction:column;gap:12px}
         <span class="eyebrow">Aide</span>
         <div class="help-t">Besoin d'aide ?</div>
         <p>Contacte <a href="https://outlook.office.com/mail/deeplink/compose?to=Naceir.BENSAADA%40freepro.com&amp;subject=Free%20Pro%20Badges%20%E2%80%94%20aide" target="_blank" rel="noopener" title="Ouvrir dans Outlook">Naceir.BENSAADA@freepro.com</a></p>
-        <p style="margin-top:8px;font-size:11px;opacity:.6">Version du 25/11 · logos SVG + étape rouge</p>
+        <p style="margin-top:8px;font-size:11px;opacity:.6">Version du 25/11 · édition Noël</p>
       </aside>
 
       <!-- détourage figé : seuil 60, bord 129 -->
@@ -429,7 +432,31 @@ const LOGO_POS={x:260,y:1294,w:520,FW:1041,FH:1609};
 const FONT='"Iliad", "Helvetica Neue", Arial, sans-serif';
 const st={bgMode:"black",model:"f18",src:null,mask:null,z:1,tx:0,ty:0,imgs:{},stk:[],sel:null,svc:0,bgColor:SERVICES[0].color,logo:"original",txColor:"#ffffff"};
 const logoImgs={};const logoImg=k=>logoImgs[k]||(logoImgs[k]=loadImg(LOGOS.find(l=>l[0]===k)[2]));
-const STICKERS=["100", "Antenne", "Boutique", "Bulle", "Cartes01", "Cartes02", "Clap01", "Clap02", "Code", "Coeur01", "Coeur02", "Coeur03", "Coeurs", "Confettis", "Courbe", "Des", "Etoiles", "etre-free-fr", "Feuilles", "Fleche", "Fleches", "Fleurs01", "Fleurs02", "Fleurs03", "Fleurs04", "FreeboxUltra", "Freepro", "Fusee", "Gateau", "Goodvibes", "Liberte", "Libre", "Loupe", "Medaille", "Megaphone", "Merci", "Micro", "News", "Ordinateur", "Palmier", "Paris", "Plus", "Recrute", "RejoinsNous", "Smiley", "Spacionaute", "Top", "Un", "Waow"];
+/* ===== NOËL — début ===== s'arrête tout seul le 6 janvier 2027 (changer la date ci-dessous, ou mettre NOEL_FIN="2000-01-01" pour l'arrêter tout de suite) */
+const NOEL_FIN="2027-01-06";
+const NOEL=(()=>{try{const q=new URLSearchParams(location.search).get("noel");if(q==="1")return true;if(q==="0")return false}catch(e){}return new Date()<new Date(NOEL_FIN+"T00:00:00")})();
+const NOEL_STK=["Noel_Sapin","Noel_Bonnet","Noel_Cadeau","Noel_Flocon","Noel_Boule","Noel_SucreOrge","Noel_Bonhomme","Noel_Houx","Noel_JoyeusesFetes"];
+if(NOEL){document.documentElement.classList.add("noel");
+  addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".hero .eyebrow");if(e)e.textContent="Édition spéciale fêtes ❄";});
+  // chute de flocons sur tout le site (au-dessus du contenu, sans bloquer les clics ; coupée si l'appareil demande moins d'animations)
+  addEventListener("load",()=>{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+    const c=document.createElement("canvas");c.id="snow";c.setAttribute("aria-hidden","true");document.body.appendChild(c);const q=c.getContext("2d");let W,H,F=[];
+    const mk=(top)=>{const big=Math.random()<.35;return{x:Math.random()*W,y:top?-20:Math.random()*H,r:big?6+Math.random()*7:1.6+Math.random()*2.6,big,v:big?.5+Math.random()*.7:.6+Math.random()*1.1,s:Math.random()*6.28,a:Math.random()*6.28,va:(Math.random()-.5)*.02,o:.55+Math.random()*.4}};
+    const size=()=>{const d=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;q.setTransform(d,0,0,d,0,0);
+      const n=Math.round(Math.min(90,W*H/16000));while(F.length<n)F.push(mk(false));F.length=n};
+    size();addEventListener("resize",size);
+    const flake=(f)=>{q.save();q.translate(f.x,f.y);q.rotate(f.a);q.beginPath();
+      for(let k=0;k<6;k++){q.rotate(Math.PI/3);q.moveTo(0,0);q.lineTo(0,-f.r);q.moveTo(0,-f.r*.55);q.lineTo(-f.r*.3,-f.r*.8);q.moveTo(0,-f.r*.55);q.lineTo(f.r*.3,-f.r*.8)}
+      q.lineWidth=Math.max(1.2,f.r/5);q.lineCap="round";q.stroke();q.restore()};
+    const tick=()=>{q.clearRect(0,0,W,H);const light=document.documentElement.dataset.theme==="light";
+      q.shadowColor=light?"rgba(40,70,120,.45)":"rgba(0,0,0,0)";q.shadowBlur=light?3:0;
+      for(const f of F){f.y+=f.v;f.s+=.01;f.a+=f.va;f.x+=Math.sin(f.s)*.5;if(f.y>H+20)Object.assign(f,mk(true));
+        const col="rgba(255,255,255,"+f.o+")";q.fillStyle=col;q.strokeStyle=col;
+        if(f.big)flake(f);else{q.beginPath();q.arc(f.x,f.y,f.r,0,6.283);q.fill()}}
+      requestAnimationFrame(tick)};tick()});
+}
+/* ===== NOËL — fin ===== */
+const STICKERS=[...(NOEL?NOEL_STK:[]),"100", "Antenne", "Boutique", "Bulle", "Cartes01", "Cartes02", "Clap01", "Clap02", "Code", "Coeur01", "Coeur02", "Coeur03", "Coeurs", "Confettis", "Courbe", "Des", "Etoiles", "etre-free-fr", "Feuilles", "Fleche", "Fleches", "Fleurs01", "Fleurs02", "Fleurs03", "Fleurs04", "FreeboxUltra", "Freepro", "Fusee", "Gateau", "Goodvibes", "Liberte", "Libre", "Loupe", "Medaille", "Megaphone", "Merci", "Micro", "News", "Ordinateur", "Palmier", "Paris", "Plus", "Recrute", "RejoinsNous", "Smiley", "Spacionaute", "Top", "Un", "Waow"];
 const stkImgs={};const stkImg=n=>stkImgs[n]||(stkImgs[n]=loadImg("stk/"+n+".png"));
 
 function loadImg(src){src=(window.__A&&window.__A[src])||src;return new Promise((ok,ko)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>ko(new Error(src));i.src=src})}
