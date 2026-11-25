@@ -98,6 +98,11 @@ input[type=text]:focus{border-color:var(--fg);outline:none}
 .stk-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;max-height:250px;overflow-y:auto;padding:2px}
 .stk-grid button{aspect-ratio:1;background:var(--tile);border:1.5px solid transparent;border-radius:12px;padding:6px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .stk-grid button:hover{border-color:var(--red)}
+/* stickers du moment (ex. Noël) : fond teinté + ruban diagonal en haut à droite */
+.stk-grid button{position:relative;overflow:hidden}
+.stk-grid button.moment{background:rgba(249,54,54,.09);border-color:rgba(249,54,54,.38)}
+.stk-grid button.moment:hover{border-color:#F93636}
+.stk-grid button.moment::after{content:attr(data-badge);position:absolute;top:7px;right:-22px;width:72px;transform:rotate(45deg);background:#F93636;color:#fff;font:700 7px/13px var(--title);letter-spacing:.12em;text-align:center;text-transform:uppercase;box-shadow:0 1px 3px rgba(0,0,0,.25);pointer-events:none}
 .stk-grid img{max-width:100%;max-height:100%;object-fit:contain;pointer-events:none}
 #sel{position:absolute;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.35);pointer-events:none;transform-origin:center}
 #sel .h{position:absolute;width:14px;height:14px;background:#fff;border:2px solid var(--red);border-radius:50%;pointer-events:auto;touch-action:none;box-shadow:0 1px 3px rgba(0,0,0,.4)}
@@ -458,6 +463,7 @@ const STARSHIP=true;
 /* ===== NOËL — début ===== s'arrête tout seul le 6 janvier 2027 (changer la date ci-dessous, ou mettre NOEL_FIN="2000-01-01" pour l'arrêter tout de suite) */
 const NOEL_FIN="2027-01-06";
 const NOEL=(()=>{try{const q=new URLSearchParams(location.search).get("noel");if(q==="1")return true;if(q==="0")return false}catch(e){}return new Date()<new Date(NOEL_FIN+"T00:00:00")})();
+const NOEL_BADGE="Noël"; /* texte du ruban sur les stickers du moment */
 const NOEL_STK=["Noel_Sapin","Noel_Bonnet","Noel_Cadeau","Noel_Flocon","Noel_Boule","Noel_SucreOrge","Noel_Bonhomme","Noel_Houx","Noel_JoyeusesFetes"];
 if(NOEL){document.documentElement.classList.add("noel");
   addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".hero .eyebrow");if(e)e.textContent="Joyeux Noël Explorers !";e.style.fontFamily="var(--title)";e.style.color="#F93636";});
@@ -621,6 +627,7 @@ function bgModes(){const el=$("bgMode");el.innerHTML="";for(const [k,label] of [
 services();logos();bgModes();
 let t;const later=()=>{clearTimeout(t);t=setTimeout(render,80)};
 {const g=$("stkGrid");for(const n of STICKERS){const b=document.createElement("button");b.type="button";b.title=n;b.setAttribute("aria-label","Ajouter le sticker "+n);
+  if(NOEL&&NOEL_STK.includes(n)){b.classList.add("moment");b.dataset.badge=NOEL_BADGE;b.title=n.replace("Noel_","")+" · sticker du moment"}
   const i=document.createElement("img");i.src=(window.__A&&window.__A["stk/"+n+".png"])||("stk/"+n+".png");i.alt="";i.loading="lazy";b.appendChild(i);
   b.onclick=async()=>{const im=await stkImg(n);const k={n,x:OW/2+(Math.random()-.5)*60,y:OH*0.3+(Math.random()-.5)*60,w:160,r:Math.round((Math.random()-.5)*16),behind:false};k.h=k.w*im.height/im.width;st.stk.push(k);commit();select(k);render()};g.appendChild(b)}}
 $("sBehind").addEventListener("change",()=>{if(!st.sel)return;st.sel.behind=$("sBehind").checked;commit();render()});
